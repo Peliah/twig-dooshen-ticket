@@ -1,0 +1,9 @@
+{% extends "base.html.twig" %}
+
+{% block content %}
+    {% if mode == 'register' %}
+        {% include 'auth/register.html.twig' %}
+    {% else %}
+        {% include 'auth/login.html.twig' %}
+    {% endif %}
+{% endblock %}

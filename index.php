@@ -63,6 +63,16 @@ switch ($segments[0]) {
         ];
         break;
         
+    case 'auth':
+        $template = 'auth.html.twig';
+        $data = [
+            'title' => 'Authentication - DST',
+            'mode' => $_GET['mode'] ?? 'login',
+            'hide_nav' => true,
+            'hide_footer' => true
+        ];
+        break;
+        
     default:
         $template = 'dst_landing.html.twig';
         $data = [
