@@ -9,8 +9,8 @@
             <p class="text-gray-400  text-sm mt-1">Sign in to your account</p>
         </div>
 
-        <!-- Form -->
-        <form method="POST" action="/auth/login" class="space-y-4">
+         <!-- Form -->
+        <form id="loginForm" class="space-y-4">
             <!-- Email Field -->
             <div>
                 <input
@@ -77,4 +77,46 @@ function togglePassword(button) {
     }
     lucide.createIcons();
 }
+
+// Login Form Handler
+document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const email = this.email.value;
+    const password = this.password.value;
+    const submitBtn = this.querySelector('button[type="submit"]');
+    
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Signing In...';
+    
+    try {
+        const response = await fetch('/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: new URLSearchParams({ email, password })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            // Store in localStorage with key ticketapp_session
+            localStorage.setItem('ticketapp_session', JSON.stringify({
+                user: data.user,
+                timestamp: Date.now()
+            }));
+            window.location.href = '/dashboard';
+        } else {
+            alert(data.message || 'Login failed');
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Sign In';
+        }
+    } catch (error) {
+        alert('Login failed. Please try again.');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Sign In';
+    }
+});
 </script>

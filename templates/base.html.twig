@@ -84,7 +84,7 @@
                     </li>
                 </ul>
 
-                <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-4" id="authButtons">
                     <a href="/auth?mode=login" class="flex items-center space-x-2 px-4 py-2 border border-white rounded-md hover:bg-white hover:text-[#232323] transition-colors">
                         <i data-lucide="log-in" class="w-4 h-4"></i>
                         <span>Sign In</span>
@@ -199,6 +199,36 @@
     <!-- Initialize Lucide Icons -->
     <script>
         lucide.createIcons();
+        
+        // Check session and update navbar
+        function checkSession() {
+            const session = localStorage.getItem('ticketapp_session');
+            const authButtons = document.getElementById('authButtons');
+            
+            if (authButtons) {
+                if (session) {
+                    const sessionData = JSON.parse(session);
+                    authButtons.innerHTML = `
+                        <a href="/dashboard" class="flex items-center space-x-2 px-4 py-2 border border-white rounded-md hover:bg-white hover:text-[#232323] transition-colors">
+                            <i data-lucide="user" class="w-4 h-4"></i>
+                            <span>${sessionData.user.name}</span>
+                        </a>
+                        <button onclick="logout()" class="flex items-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors">
+                            <i data-lucide="log-out" class="w-4 h-4"></i>
+                            <span>Logout</span>
+                        </button>
+                    `;
+                }
+                lucide.createIcons();
+            }
+        }
+        
+        function logout() {
+            localStorage.removeItem('ticketapp_session');
+            window.location.href = '/';
+        }
+        
+        checkSession();
     </script>
     
     {% block extra_scripts %}{% endblock %}

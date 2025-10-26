@@ -9,8 +9,8 @@
             <p class="text-gray-400  text-sm mt-1">Create your account</p>
         </div>
 
-        <!-- Form -->
-        <form method="POST" action="/auth/register" class="space-y-4">
+         <!-- Form -->
+        <form id="registerForm" class="space-y-4">
             <!-- Name Field -->
             <div>
                 <input
@@ -108,4 +108,53 @@ function togglePassword(button) {
     }
     lucide.createIcons();
 }
+
+// Register Form Handler
+document.getElementById('registerForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const name = this.name.value;
+    const email = this.email.value;
+    const password = this.password.value;
+    const confirm_password = this.confirm_password.value;
+    const submitBtn = this.querySelector('button[type="submit"]');
+    
+    if (password !== confirm_password) {
+        alert('Passwords do not match');
+        return;
+    }
+    
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Creating Account...';
+    
+    try {
+        const response = await fetch('/auth/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: new URLSearchParams({ name, email, password, confirm_password })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            // Store in localStorage with key ticketapp_session
+            localStorage.setItem('ticketapp_session', JSON.stringify({
+                user: data.user,
+                timestamp: Date.now()
+            }));
+            window.location.href = '/dashboard';
+        } else {
+            alert(data.message || 'Registration failed');
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Create Account';
+        }
+    } catch (error) {
+        alert('Registration failed. Please try again.');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Create Account';
+    }
+});
 </script>
