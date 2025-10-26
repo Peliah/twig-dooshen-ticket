@@ -33,6 +33,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SERVER['HTTP_X_REQUESTED_WI
         
         foreach ($_SESSION['users'] as $user) {
             if ($user['email'] === $email && $user['password'] === $password) {
+                // Set cookie
+                $sessionData = json_encode([
+                    'user' => [
+                        'id' => $user['id'],
+                        'name' => $user['name'],
+                        'email' => $user['email']
+                    ],
+                    'timestamp' => time()
+                ]);
+                
+                setcookie('ticketapp_session', $sessionData, time() + (86400 * 30), '/', '', false, true); // 30 days, httpOnly for security
+                
                 echo json_encode([
                     'success' => true,
                     'user' => [
@@ -77,6 +89,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SERVER['HTTP_X_REQUESTED_WI
         ];
         
         $_SESSION['users'][] = $newUser;
+        
+        // Set cookie
+        $sessionData = json_encode([
+            'user' => [
+                'id' => $newUser['id'],
+                'name' => $newUser['name'],
+                'email' => $newUser['email']
+            ],
+            'timestamp' => time()
+        ]);
+        
+        setcookie('ticketapp_session', $sessionData, time() + (86400 * 30), '/', '', false, true); // 30 days, httpOnly for security
         
         echo json_encode([
             'success' => true,
@@ -145,15 +169,28 @@ switch ($segments[0]) {
         break;
         
     case 'dashboard':
-        // Check for session in localStorage - this would be done client-side
-        if (isset($segments[1]) && $segments[1] === 'tickets') {
-            $template = 'dashboard/tickets.html.twig';
+        // Store session data in cookies for server-side protection
+        $sessionCookie = isset($_COOKIE['ticketapp_session']) ? $_COOKIE['ticketapp_session'] : null;
+        
+        // If no session cookie, show a simple page that redirects client-side
+        if (!$sessionCookie) {
+            $template = 'auth.html.twig';
+            $data = [
+                'title' => 'Authentication - DST',
+                'mode' => $_GET['mode'] ?? 'login',
+                'hide_nav' => true,
+                'hide_footer' => true
+            ];
         } else {
-            $template = 'dashboard.html.twig';
+            if (isset($segments[1]) && $segments[1] === 'tickets') {
+                $template = 'dashboard/tickets.html.twig';
+            } else {
+                $template = 'dashboard.html.twig';
+            }
+            $data = [
+                'title' => 'Dashboard - DST'
+            ];
         }
-        $data = [
-            'title' => 'Dashboard - DST'
-        ];
         break;
         
     case 'logout':

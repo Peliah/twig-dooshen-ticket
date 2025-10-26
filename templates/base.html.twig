@@ -1,236 +1,379 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}DST - Support Ticket Management System{% endblock %}</title>
-    
-    <!-- Franken UI CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/franken-ui@latest/dist/franken-ui.min.css">
-    
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Franken UI JavaScript -->
-    <script type="module" src="https://cdn.jsdelivr.net/npm/franken-ui@latest/dist/franken-ui.min.js"></script>
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    
-    <style>
-        :root {
-            --franken-primary: 221 83% 53%;
-            --franken-primary-foreground: 0 0% 100%;
-            --franken-secondary: 210 40% 96.1%;
-            --franken-secondary-foreground: 222.2 47.4% 11.2%;
-            --franken-accent: 210 40% 96.1%;
-            --franken-accent-foreground: 222.2 47.4% 11.2%;
-            --franken-destructive: 0 84.2% 90.6%;
-            --franken-destructive-foreground: 0 0% 98%;
-            --franken-muted: 210 40% 96.1%;
-            --franken-muted-foreground: 215.4 16.3% 46.9%;
-            --franken-border: 214.3 31.8% 91.4%;
-            --franken-input: 214.3 31.8% 91.4%;
-            --franken-ring: 221 83% 53%;
-            --franken-radius: 0.5rem;
-        }
-        
-        * {
-            font-family: 'Geist Mono', monospace;
-        }
-        
-        body {
-            background-color: #f5f5f5;
-        }
-    </style>
-    
-    {% block extra_head %}{% endblock %}
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>
+			{% block title %}DST - Support Ticket Management System
+			{% endblock %}
+		</title>
+
+		<!-- Franken UI CSS -->
+		<link
+		rel="stylesheet" href="https://cdn.jsdelivr.net/npm/franken-ui@latest/dist/franken-ui.min.css">
+
+		<!-- Tailwind CSS CDN -->
+		<script src="https://cdn.tailwindcss.com"></script>
+
+		<!-- Franken UI JavaScript -->
+		<script type="module" src="https://cdn.jsdelivr.net/npm/franken-ui@latest/dist/franken-ui.min.js"></script>
+
+		<!-- Google Fonts -->
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link
+		href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+		<!-- Lucide Icons -->
+		<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+		<style>:root
+		{
+			--franken-primary: 221 83% 53%;
+			--franken-primary-foreground: 0 0 100%;
+			--franken-secondary: 210 40% 96.1%;
+			--franken-secondary-foreground: 222.2 47.4% 11.2%;
+			--franken-accent: 210 40% 96.1%;
+			--franken-accent-foreground: 222.2 47.4% 11.2%;
+			--franken-destructive: 0 84.2% 90.6%;
+			--franken-destructive-foreground: 0 0 98%;
+			--franken-muted: 210 40% 96.1%;
+			--franken-muted-foreground: 215.4 16.3% 46.9%;
+			--franken-border: 214.3 31.8% 91.4%;
+			--franken-input: 214.3 31.8% 91.4%;
+			--franken-ring: 221 83% 53%;
+			--franken-radius: 0.5rem;
+		}
+
+		* {
+			font-family: 'Geist Mono', monospace;
+		}
+
+		body {
+			background-color: #f5f5f5;
+		}
+
+		/* Toast animations */
+		@keyframes slideInRight {
+			from {
+				transform: translateX(100%);
+				opacity: 0;
+			}
+			to {
+				transform: translateX(0);
+				opacity: 1;
+			}
+		}
+
+		@keyframes slideOutRight {
+			from {
+				transform: translateX(0);
+				opacity: 1;
+			}
+			to {
+				transform: translateX(100%);
+				opacity: 0;
+			}
+		}
+	</style>
+
+	{% block extra_head %}{% endblock %}
 </head>
-<body class="antialiased">
-    
-    <!-- Navbar -->
-    <header class="bg-[#232323] text-white font-mono">
-        <nav class="container mx-auto px-4 py-4">
-            <div class="flex items-center justify-between">
-                <a href="/" class="flex items-center space-x-2 hover:opacity-80 transition-opacity">
-                    <h1 class="text-2xl font-bold">DST</h1>
+<body
+	class="antialiased">
+
+	<!-- Navbar -->
+	<header class="bg-[#232323] text-white font-mono">
+		<nav class="container mx-auto px-4 py-4">
+			<div class="flex items-center justify-between">
+				<a href="/" class="flex items-center space-x-2 hover:opacity-80 transition-opacity">
+					<h1 class="text-2xl font-bold">DST</h1>
+				</a>
+
+				<ul class="hidden md:flex items-center space-x-8">
+					<li>
+						<a href="/" class="hover:text-gray-300 transition-colors">
+							Home
+						</a>
+					</li>
+					<li>
+						<a href="/dashboard/tickets" class="hover:text-gray-300 transition-colors">
+							Tickets
+						</a>
+					</li>
+					<li>
+						<a href="/dashboard" class="hover:text-gray-300 transition-colors">
+							Dashboard
+						</a>
+					</li>
+					<li>
+						<a href="/contact" class="hover:text-gray-300 transition-colors">
+							Contact
+						</a>
+					</li>
+				</ul>
+
+				<div class="flex items-center space-x-4" id="authButtons">
+					<a href="/auth?mode=login" class="flex items-center space-x-2 px-4 py-2 border border-white rounded-md hover:bg-white hover:text-[#232323] transition-colors">
+						<i data-lucide="log-in" class="w-4 h-4"></i>
+						<span>Sign In</span>
+					</a>
+					<a href="/auth?mode=register" class="flex items-center space-x-2 px-4 py-2 bg-white text-[#232323] rounded-md hover:bg-gray-200 transition-colors">
+						<i data-lucide="user-plus" class="w-4 h-4"></i>
+						<span>Sign Up</span>
+					</a>
+				</div>
+			</div>
+		</nav>
+	</header>
+
+	<!-- Main Content -->
+	<main>
+		{% block content %}{% endblock %}
+	</main>
+
+	<!-- Footer -->
+	<footer class="bg-[#232323] text-white font-mono">
+		<div class="container mx-auto px-4 py-8">
+			<div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+				<div class="col-span-1 md:col-span-2">
+					<a href="/" class="flex items-center space-x-2 mb-4">
+						<h2 class="text-2xl font-bold">DST</h2>
+					</a>
+					<p class="text-gray-300 mb-4 max-w-md">
+						Your premier destination for event ticket management.
+																														Discover, purchase, and manage your event tickets with ease.
+					</p>
+					<div class="flex space-x-4">
+						<a href="#" class="text-gray-300 hover:text-white transition-colors">
+							<span class="sr-only">Facebook</span>
+							<i data-lucide="facebook" class="w-6 h-6"></i>
+						</a>
+						<a href="#" class="text-gray-300 hover:text-white transition-colors">
+							<span class="sr-only">Twitter</span>
+							<i data-lucide="twitter" class="w-6 h-6"></i>
+						</a>
+						<a href="#" class="text-gray-300 hover:text-white transition-colors">
+							<span class="sr-only">Instagram</span>
+							<i data-lucide="instagram" class="w-6 h-6"></i>
+						</a>
+					</div>
+				</div>
+
+				<div>
+					<h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+					<ul class="space-y-2">
+						<li>
+							<a href="/" class="text-gray-300 hover:text-white transition-colors">
+								Home
+							</a>
+						</li>
+						<li>
+							<a href="/events" class="text-gray-300 hover:text-white transition-colors">
+								Events
+							</a>
+						</li>
+						<li>
+							<a href="/tickets" class="text-gray-300 hover:text-white transition-colors">
+								My Tickets
+							</a>
+						</li>
+						<li>
+							<a href="/about" class="text-gray-300 hover:text-white transition-colors">
+								About Us
+							</a>
+						</li>
+					</ul>
+				</div>
+
+				<div>
+					<h3 class="text-lg font-semibold mb-4">Support</h3>
+					<ul class="space-y-2">
+						<li>
+							<a href="/help" class="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors">
+								<i data-lucide="help-circle" class="w-4 h-4"></i>
+								<span>Help Center</span>
+							</a>
+						</li>
+						<li>
+							<a href="/contact" class="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors">
+								<i data-lucide="mail" class="w-4 h-4"></i>
+								<span>Contact Us</span>
+							</a>
+						</li>
+						<li>
+							<a href="/privacy" class="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors">
+								<i data-lucide="shield" class="w-4 h-4"></i>
+								<span>Privacy Policy</span>
+							</a>
+						</li>
+						<li>
+							<a href="/terms" class="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors">
+								<i data-lucide="file-text" class="w-4 h-4"></i>
+								<span>Terms of Service</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="border-t border-gray-600 mt-8 pt-8 text-center">
+				<p class="text-gray-300">
+					© 2025 DST Event Ticket Management. All rights reserved.
+				</p>
+			</div>
+		</div>
+	</footer>
+
+	<!-- Initialize Lucide Icons and Toaster -->
+	<script>
+		lucide.createIcons();
+
+// Shadcn-like Toast Implementation
+(function () { // Create toast container
+const toastContainer = document.createElement('div');
+toastContainer.id = 'toast-container';
+toastContainer.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 10000;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    `;
+document.body.appendChild(toastContainer);
+
+function createToast(message, type = 'info') {
+const toast = document.createElement('div');
+toast.className = `toast toast-${type}`;
+
+const typeColors = {
+success: {
+bg: '#f0fdf4',
+border: '#bbf7d0',
+text: '#166534',
+accent: '#16a34a'
+},
+error: {
+bg: '#fef2f2',
+border: '#fecaca',
+text: '#991b1b',
+accent: '#dc2626'
+},
+warning: {
+bg: '#fffbeb',
+border: '#fed7aa',
+text: '#92400e',
+accent: '#ea580c'
+},
+info: {
+bg: '#f0f9ff',
+border: '#bae6fd',
+text: '#0c4a6e',
+accent: '#0284c7'
+}
+};
+
+const colors = typeColors[type] || typeColors.info;
+const icons = {
+success: '✓',
+error: '✕',
+warning: '⚠',
+info: 'ℹ'
+};
+
+toast.style.cssText = `
+            background: ${
+colors.bg
+};
+            border: 1px solid ${
+colors.border
+};
+            border-left: 4px solid ${
+colors.accent
+};
+            border-radius: 6px;
+            padding: 12px 16px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 200px;
+            max-width: 400px;
+            animation: slideInRight 0.3s ease-out;
+            font-family: 'Geist Mono', monospace;
+            font-size: 14px;
+            color: ${
+colors.text
+};
+        `;
+
+toast.innerHTML = `
+            <span style="color: ${
+colors.accent
+}; font-weight: bold;">${
+icons[type]
+}</span>
+            <span>${message}</span>
+        `;
+
+toastContainer.appendChild(toast);
+
+setTimeout(() => {
+toast.style.animation = 'slideOutRight 0.3s ease-out';
+setTimeout(() => {
+if (toast.parentNode === toastContainer) {
+toastContainer.removeChild(toast);
+}
+}, 300);
+}, 3000);
+}
+
+// Global functions
+window.toast = {
+success: (msg) => createToast(msg, 'success'),
+error: (msg) => createToast(msg, 'error'),
+info: (msg) => createToast(msg, 'info'),
+warning: (msg) => createToast(msg, 'warning')
+};
+})();
+
+// Check session and update navbar
+function checkSession() {
+const session = localStorage.getItem('ticketapp_session');
+const authButtons = document.getElementById('authButtons');
+
+if (authButtons) {
+if (session) {
+const sessionData = JSON.parse(session);
+authButtons.innerHTML = `
+                <a href="/dashboard" class="flex items-center space-x-2 px-4 py-2 border border-white rounded-md hover:bg-white hover:text-[#232323] transition-colors">
+                    <i data-lucide="user" class="w-4 h-4"></i>
+                    <span>${
+sessionData.user ?. name || 'User'
+}</span>
                 </a>
+                <button onclick="logout()" class="flex items-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors">
+                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                    <span>Logout</span>
+                </button>
+            `;
+}
+lucide.createIcons();
+}
+}
 
-                <ul class="hidden md:flex items-center space-x-8">
-                    <li>
-                        <a href="/" class="hover:text-gray-300 transition-colors">
-                            Home
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/dashboard/tickets" class="hover:text-gray-300 transition-colors">
-                            Tickets
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/dashboard" class="hover:text-gray-300 transition-colors">
-                            Dashboard
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/contact" class="hover:text-gray-300 transition-colors">
-                            Contact
-                        </a>
-                    </li>
-                </ul>
+function logout() {
+localStorage.removeItem('ticketapp_session');
+window.toast.success('Logged out successfully');
+setTimeout(() => {
+window.location.href = '/';
+}, 500);
+}
 
-                <div class="flex items-center space-x-4" id="authButtons">
-                    <a href="/auth?mode=login" class="flex items-center space-x-2 px-4 py-2 border border-white rounded-md hover:bg-white hover:text-[#232323] transition-colors">
-                        <i data-lucide="log-in" class="w-4 h-4"></i>
-                        <span>Sign In</span>
-                    </a>
-                    <a href="/auth?mode=register" class="flex items-center space-x-2 px-4 py-2 bg-white text-[#232323] rounded-md hover:bg-gray-200 transition-colors">
-                        <i data-lucide="user-plus" class="w-4 h-4"></i>
-                        <span>Sign Up</span>
-                    </a>
-                </div>
-            </div>
-        </nav>
-    </header>
+checkSession();
+	</script>
 
-    <!-- Main Content -->
-    <main>
-        {% block content %}{% endblock %}
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-[#232323] text-white font-mono">
-        <div class="container mx-auto px-4 py-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div class="col-span-1 md:col-span-2">
-                    <a href="/" class="flex items-center space-x-2 mb-4">
-                        <h2 class="text-2xl font-bold">DST</h2>
-                    </a>
-                    <p class="text-gray-300 mb-4 max-w-md">
-                        Your premier destination for event ticket management.
-                        Discover, purchase, and manage your event tickets with ease.
-                    </p>
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-gray-300 hover:text-white transition-colors">
-                            <span class="sr-only">Facebook</span>
-                            <i data-lucide="facebook" class="w-6 h-6"></i>
-                        </a>
-                        <a href="#" class="text-gray-300 hover:text-white transition-colors">
-                            <span class="sr-only">Twitter</span>
-                            <i data-lucide="twitter" class="w-6 h-6"></i>
-                        </a>
-                        <a href="#" class="text-gray-300 hover:text-white transition-colors">
-                            <span class="sr-only">Instagram</span>
-                            <i data-lucide="instagram" class="w-6 h-6"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
-                    <ul class="space-y-2">
-                        <li>
-                            <a href="/" class="text-gray-300 hover:text-white transition-colors">
-                                Home
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/events" class="text-gray-300 hover:text-white transition-colors">
-                                Events
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/tickets" class="text-gray-300 hover:text-white transition-colors">
-                                My Tickets
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/about" class="text-gray-300 hover:text-white transition-colors">
-                                About Us
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">Support</h3>
-                    <ul class="space-y-2">
-                        <li>
-                            <a href="/help" class="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors">
-                                <i data-lucide="help-circle" class="w-4 h-4"></i>
-                                <span>Help Center</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/contact" class="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors">
-                                <i data-lucide="mail" class="w-4 h-4"></i>
-                                <span>Contact Us</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/privacy" class="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors">
-                                <i data-lucide="shield" class="w-4 h-4"></i>
-                                <span>Privacy Policy</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/terms" class="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors">
-                                <i data-lucide="file-text" class="w-4 h-4"></i>
-                                <span>Terms of Service</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="border-t border-gray-600 mt-8 pt-8 text-center">
-                <p class="text-gray-300">
-                    © 2025 DST Event Ticket Management. All rights reserved.
-                </p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Initialize Lucide Icons -->
-    <script>
-        lucide.createIcons();
-        
-        // Check session and update navbar
-        function checkSession() {
-            const session = localStorage.getItem('ticketapp_session');
-            const authButtons = document.getElementById('authButtons');
-            
-            if (authButtons) {
-                if (session) {
-                    const sessionData = JSON.parse(session);
-                    authButtons.innerHTML = `
-                        <a href="/dashboard" class="flex items-center space-x-2 px-4 py-2 border border-white rounded-md hover:bg-white hover:text-[#232323] transition-colors">
-                            <i data-lucide="user" class="w-4 h-4"></i>
-                            <span>${sessionData.user.name}</span>
-                        </a>
-                        <button onclick="logout()" class="flex items-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors">
-                            <i data-lucide="log-out" class="w-4 h-4"></i>
-                            <span>Logout</span>
-                        </button>
-                    `;
-                }
-                lucide.createIcons();
-            }
-        }
-        
-        function logout() {
-            localStorage.removeItem('ticketapp_session');
-            window.location.href = '/';
-        }
-        
-        checkSession();
-    </script>
-    
-    {% block extra_scripts %}{% endblock %}
-</body>
-</html>
+	{% block extra_scripts %}{% endblock %}
+</body></html>

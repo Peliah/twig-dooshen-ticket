@@ -1,122 +1,107 @@
 <div class="min-h-screen bg-[#232323] flex items-center justify-center p-4">
-    <div class="w-full max-w-sm">
-        <!-- Header -->
-        <div class="text-center mb-8">
-            <div class="flex items-center justify-center mb-4">
-                <i data-lucide="log-in" class="h-8 w-8 text-white"></i>
-            </div>
-            <h1 class="text-2xl font-bold text-white ">Welcome Back</h1>
-            <p class="text-gray-400  text-sm mt-1">Sign in to your account</p>
-        </div>
+	<div
+		class="w-full max-w-sm">
+		<!-- Header -->
+		<div class="text-center mb-8">
+			<div class="flex items-center justify-center mb-4">
+				<i data-lucide="log-in" class="h-8 w-8 text-white"></i>
+			</div>
+			<h1 class="text-2xl font-bold text-white ">Welcome Back</h1>
+			<p class="text-gray-400  text-sm mt-1">Sign in to your account</p>
+		</div>
 
-         <!-- Form -->
-        <form id="loginForm" class="space-y-4">
-            <!-- Email Field -->
-            <div>
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="Email address"
-                    required
-                    class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent  text-sm"
-                />
-            </div>
+		<!-- Form -->
+		<form
+			id="loginForm" class="space-y-4">
+			<!-- Email Field -->
+			<div>
+				<input type="email" name="email" placeholder="Email address" required class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent  text-sm"/>
+			</div>
 
-            <!-- Password Field -->
-            <div>
-                <div class="relative">
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                        required
-                        class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent  text-sm pr-12"
-                    />
-                    <button
-                        type="button"
-                        onclick="togglePassword(this)"
-                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
-                    >
-                        <i data-lucide="eye-off" class="h-4 w-4"></i>
-                    </button>
-                </div>
-            </div>
+			<!-- Password Field -->
+			<div>
+				<div class="relative">
+					<input type="password" name="password" placeholder="Password" required class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent  text-sm pr-12"/>
+					<button type="button" onclick="togglePassword(this)" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">
+						<i data-lucide="eye-off" class="h-4 w-4"></i>
+					</button>
+				</div>
+			</div>
 
-            <!-- Submit Button -->
-            <button
-                type="submit"
-                class="w-full bg-white text-[#232323] py-3 rounded-lg  font-medium hover:bg-gray-100 transition-colors text-sm"
-            >
-                Sign In
-            </button>
-        </form>
+			<!-- Submit Button -->
+			<button type="submit" class="w-full bg-white text-[#232323] py-3 rounded-lg  font-medium hover:bg-gray-100 transition-colors text-sm">
+				Sign In
+			</button>
+		</form>
 
-        <!-- Footer -->
-        <div class="mt-6 text-center">
-            <p class="text-gray-400  text-sm">
-                Don't have an account?
-                <a href="/auth?mode=register" class="text-blue-400 hover:text-blue-300 transition-colors font-medium">
-                    Sign up
-                </a>
-            </p>
-        </div>
-    </div>
+		<!-- Footer -->
+		<div class="mt-6 text-center">
+			<p class="text-gray-400  text-sm">
+				Don't have an account?
+				<a href="/auth?mode=register" class="text-blue-400 hover:text-blue-300 transition-colors font-medium">
+					Sign up
+				</a>
+			</p>
+		</div>
+	</div>
 </div>
 
 <script>
-function togglePassword(button) {
-    const input = button.previousElementSibling;
-    const icon = button.querySelector('i');
-    
-    if (input.type === 'password') {
-        input.type = 'text';
-        icon.setAttribute('data-lucide', 'eye');
-    } else {
-        input.type = 'password';
-        icon.setAttribute('data-lucide', 'eye-off');
-    }
-    lucide.createIcons();
+	function togglePassword(button) {
+const input = button.previousElementSibling;
+const icon = button.querySelector('i');
+
+if (input.type === 'password') {
+input.type = 'text';
+icon.setAttribute('data-lucide', 'eye');
+} else {
+input.type = 'password';
+icon.setAttribute('data-lucide', 'eye-off');
+}
+lucide.createIcons();
 }
 
 // Login Form Handler
-document.getElementById('loginForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    
-    const email = this.email.value;
-    const password = this.password.value;
-    const submitBtn = this.querySelector('button[type="submit"]');
-    
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Signing In...';
-    
-    try {
-        const response = await fetch('/auth/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            body: new URLSearchParams({ email, password })
-        });
-        
-        const data = await response.json();
-        
-        if (data.success) {
-            // Store in localStorage with key ticketapp_session
-            localStorage.setItem('ticketapp_session', JSON.stringify({
-                user: data.user,
-                timestamp: Date.now()
-            }));
-            window.location.href = '/dashboard';
-        } else {
-            alert(data.message || 'Login failed');
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Sign In';
-        }
-    } catch (error) {
-        alert('Login failed. Please try again.');
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Sign In';
-    }
+document.getElementById('loginForm').addEventListener('submit', async function (e) {
+e.preventDefault();
+
+const email = this.email.value;
+const password = this.password.value;
+const submitBtn = this.querySelector('button[type="submit"]');
+
+submitBtn.disabled = true;
+submitBtn.textContent = 'Signing In...';
+
+try {
+const response = await fetch('/auth/login', {
+method: 'POST',
+headers: {
+'Content-Type': 'application/x-www-form-urlencoded',
+'X-Requested-With': 'XMLHttpRequest'
+},
+body: new URLSearchParams(
+{email, password}
+)
+});
+
+const data = await response.json();
+
+if (data.success) {
+window.toast.success('Login successful! Redirecting...');
+// Store in localStorage with key ticketapp_session
+localStorage.setItem('ticketapp_session', JSON.stringify({user: data.user, timestamp: Date.now()}));
+setTimeout(() => {
+window.location.href = '/dashboard';
+}, 1000);
+} else {
+window.toast.error(data.message || 'Login failed');
+submitBtn.disabled = false;
+submitBtn.textContent = 'Sign In';
+}
+} catch (error) {
+window.toast.error('Login failed. Please try again.');
+submitBtn.disabled = false;
+submitBtn.textContent = 'Sign In';
+}
 });
 </script>
