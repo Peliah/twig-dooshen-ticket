@@ -1,7 +1,6 @@
 {% extends "base.html.twig" %}
 
 {% block content %}
-    <div class="min-h-screen bg-white flex items-center justify-center">
-        <h1 class="text-4xl font-bold text-gray-900">Hello World</h1>
-    </div>
+    {% include 'landing/hero.html.twig' %}
+    {% include 'landing/features.html.twig' with {'features': features} %}
 {% endblock %}
