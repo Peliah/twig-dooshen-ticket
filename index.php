@@ -146,7 +146,11 @@ switch ($segments[0]) {
         
     case 'dashboard':
         // Check for session in localStorage - this would be done client-side
-        $template = 'dashboard.html.twig';
+        if (isset($segments[1]) && $segments[1] === 'tickets') {
+            $template = 'dashboard/tickets.html.twig';
+        } else {
+            $template = 'dashboard.html.twig';
+        }
         $data = [
             'title' => 'Dashboard - DST'
         ];
