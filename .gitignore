@@ -1,2 +1,13 @@
 cache/
 vendor/
+.htaccess.backup
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
